@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Order{% endblock %}
+
+{% block body %}
+    <h1>Create new Order</h1>
+
+    {{ include('order/_form.html.twig') }}
+
+    <div class="mt-3">
+        <a href="{{ path('app_order_index') }}" class="btn btn-secondary">Back to list</a>
+    </div>
+{% endblock %}
