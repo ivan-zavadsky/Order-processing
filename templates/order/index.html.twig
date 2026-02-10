@@ -23,14 +23,36 @@
                     <td>{{ order.id }}</td>
                     <td>{{ order.userId }}</td>
                     <td class="text-end">
-                        <a href="{{ path('app_order_show', {'id': order.id}) }}" class="btn btn-sm btn-outline-secondary me-1">Show</a>
-                        <a href="{{ path('app_order_edit', {'id': order.id}) }}" class="btn btn-sm btn-outline-primary me-1">Edit</a>
-                        {{ include('order/_delete_form.html.twig', {'order': order}) }}
+                        <a
+                            href="{{ path(
+                                'app_order_show',
+                                {'id': order.id}
+                            ) }}"
+                           class="btn btn-sm btn-secondary me-1"
+                        >
+                            Show
+                        </a>
+                        <a
+                            href="{{
+                                path(
+                                    'app_order_edit',
+                                    {'id': order.id}
+                                ) }}"
+                            class="btn btn-sm btn-primary me-1"
+                        >
+                            Edit
+                        </a>
+                        {{ include(
+                            'order/_delete_form.html.twig',
+                            {'order': order}
+                        )}}
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="3" class="text-center text-muted">no records found</td>
+                    <td colspan="3" class="text-center text-muted">
+                        no records found
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

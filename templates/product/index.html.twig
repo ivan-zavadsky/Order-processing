@@ -26,13 +26,23 @@
                     <td>{{ product.name }}</td>
                     <td>{{ product.price }}</td>
                     <td class="text-end">
-                        <a href="{{ path('app_product_show', {id: product.id}) }}"
-                           class="btn btn-sm btn-outline-secondary me-1">Show</a>
+                        <a
+                            href="{{ path('app_product_show', {id: product.id}) }}"
+                            class="btn btn-sm btn-secondary me-1"
+                        >
+                            Show
+                        </a>
 
-                        <a href="{{ path('app_product_edit', {id: product.id}) }}"
-                           class="btn btn-sm btn-outline-primary me-1">Edit</a>
-
-                        {{ include('product/_delete_form.html.twig', {'product': product}) }}
+                        <a
+                            href="{{ path('app_product_edit', {id: product.id}) }}"
+                            class="btn btn-sm btn-primary me-1"
+                        >
+                            Edit
+                        </a>
+                        {{ include(
+                            'product/_delete_form.html.twig',
+                            {'product': product}
+                        ) }}
                     </td>
                 </tr>
             {% else %}
