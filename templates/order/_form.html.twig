@@ -1,13 +1,12 @@
 {{ form_start(form) }}
 <div class="row">
     <div class="col-md-6 mb-3">
-        {{ form_label(
-            form.userId,
-            'Пользователь (ID)',
-            {'label_attr':
-                {'class': 'form-label fw-semibold'}
-            }
-        ) }}
+        <label
+            class="form-label fw-semibold required"
+            for="order_userId"
+        >
+            Пользователь (ID)
+        </label>
         {{ form_widget(
             form.userId,
             {'attr':
@@ -17,13 +16,17 @@
                 }
             }
         ) }}
-        <div class="form-text text-danger">{{ form_errors(form.userId) }}</div>
+        <div class="form-text text-danger">
+            {{ form_errors(form.userId) }}
+        </div>
     </div>
 </div>
 
+
+
 <div class="mt-3">
     <button type="submit" class="btn btn-sm btn-primary">
-        {{ button_label|default('Сохранить') }}
+        Сохранить
     </button>
     <a href="{{ path('app_order_index') }}" class="btn btn-sm btn-secondary ms-2">
         Отмена
