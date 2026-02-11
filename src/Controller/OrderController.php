@@ -38,7 +38,36 @@ final class OrderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($order);
+
+            $data = $form->getData()->getItems();
+            $order = new Order();
+            $order->setUserId(1);
+
+            foreach ($data as $item) {
+
+                /** @var Product $product */
+                $product = $item->getProduct();
+                $quantity = $item->getQuantity();
+
+                // цена из базы
+                $price = $product->getPrice();
+                $total = $price * $quantity;
+
+                // создаём сущность OrderItem
+                $orderItem = new OrderItem();
+                $orderItem->setProduct($product);
+                $orderItem->setQuantity($quantity);
+                // фиксируем цену на момент заказа
+                $orderItem->setPrice($price);
+//                $orderItem->setTotal($total);
+
+                $entityManager->persist($orderItem);
+
+                $order->addItem($orderItem);
+                $entityManager->persist($order);
+            }
+
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
