@@ -3,7 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Entity\OrderItem;
+use App\Entity\Product;
+use App\Form\OrderItemType;
 use App\Form\OrderType;
+use App\Form\ProductType;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,18 +30,24 @@ final class OrderController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $order = new Order();
+        $order->addItem(new OrderItem());
         $form = $this->createForm(OrderType::class, $order);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($order);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
-        }
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $entityManager->persist($order);
+//            $entityManager->flush();
+//
+//            return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
+//        }
+        $orderItem = new OrderItem();
+//        $product = new Product();
+//        $form = $this->createForm(ProductType::class, $product);
 
         return $this->render('order/new.html.twig', [
-            'order' => $order,
+//            'order' => $order,
+//            'product' => $product,
+//            'orderItem' => $orderItem,
             'form' => $form,
         ]);
     }
