@@ -15,4 +15,11 @@
             Back to list
         </a>
     </div>
+    {% block javascripts %}
+        <script
+            src="{{ asset('js/order/order.js') }}"
+            type="module"
+        ></script>
+    {% endblock %}
+
 {% endblock %}

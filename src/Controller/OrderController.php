@@ -30,24 +30,22 @@ final class OrderController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $order = new Order();
-        $order->addItem(new OrderItem());
-        $form = $this->createForm(OrderType::class, $order);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager->persist($order);
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
-//        }
+        $order->setUserId(1);
         $orderItem = new OrderItem();
-//        $product = new Product();
-//        $form = $this->createForm(ProductType::class, $product);
+        $orderItem->setQuantity(1);
+        $order->addItem($orderItem);
+        $form = $this->createForm(OrderType::class, $order);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($order);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
+        }
 
         return $this->render('order/new.html.twig', [
 //            'order' => $order,
-//            'product' => $product,
-//            'orderItem' => $orderItem,
             'form' => $form,
         ]);
     }
