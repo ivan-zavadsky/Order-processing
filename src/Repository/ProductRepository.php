@@ -16,28 +16,32 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    //    /**
-    //     * @return Product[] Returns an array of Product objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+        public function findOneByName($value)
+        {
+            return $this->createQueryBuilder('p')
+                ->andWhere( 'p.name = :val')
+                ->setParameter('val', $value)
+                ->setMaxResults(10)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+        }
 
-    //    public function findOneBySomeField($value): ?Product
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        /**
+         * Ищет продукты по названию без учета регистра
+         *
+         * @param string $query Текст для поиска
+         * @return array Массив продуктов
+         */
+        public function findHint(string $query): array
+        {
+            return $this->createQueryBuilder('p')
+                ->where('LOWER(p.name) LIKE LOWER(:query)')
+                ->setParameter('query', '%' . $query . '%')
+                ->orderBy('p.name', 'ASC')
+                ->setMaxResults(10)
+                ->getQuery()
+                ->getResult();
+        }
+
 }

@@ -8,14 +8,14 @@ export
             .parentElement
         ;
         let newTr = tr.cloneNode(true);
-        let newSelect = newTr.querySelector('select');
+        let newInput = newTr.querySelector('input[type="text"]');
         const maxNumber = getNext() + 1;
         // maxNumber++;
-        newSelect.setAttribute(
+        newInput.setAttribute(
             'id',
             'order_items_' + (maxNumber) + '_product'
         );
-        newSelect.setAttribute(
+        newInput.setAttribute(
             'name',
             'order[items][' + (maxNumber) + '][product]'
         );

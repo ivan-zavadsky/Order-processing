@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Order;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
+use App\Service\Product\SuggestionsProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,7 +43,7 @@ final class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_product_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(Product $product): Response
     {
         return $this->render('product/show.html.twig', [
@@ -69,7 +69,12 @@ final class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
+    #[Route(
+        '/{id}',
+        name: 'app_product_delete',
+        requirements: ['id' => '\d+'],
+        methods: ['POST'])
+    ]
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->getString('_token'))) {
@@ -79,4 +84,18 @@ final class ProductController extends AbstractController
 
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/hint', name: 'app_product_hint', methods: ['GET'])]
+    public function hint(
+        Request $request,
+        SuggestionsProvider $suggestionsProvider
+    )
+        : Response
+    {
+        $query = $request->query->get('q', '');
+
+        // Возвращаем JSON с подсказками
+        return $this->json($suggestionsProvider->get($query));
+    }
+
 }
