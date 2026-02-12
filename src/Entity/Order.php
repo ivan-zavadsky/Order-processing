@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\OrderStatus;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,6 +20,9 @@ class Order
     #[ORM\Column]
     private ?int $userId = null;
 
+    #[ORM\Column(type: 'string', enumType: OrderStatus::class)]
+    private OrderStatus $status = OrderStatus::NEW;
+
     /**
      * @var Collection<int, OrderItem>
      */
@@ -30,8 +34,9 @@ class Order
     )]
     private Collection $items;
 
-    public function __construct()
+    public function __construct(int $userId)
     {
+        $this->userId = $userId;
         $this->items = new ArrayCollection();
     }
 
@@ -78,6 +83,18 @@ class Order
                 $item->setOrder(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatus(): OrderStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(OrderStatus $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

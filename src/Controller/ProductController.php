@@ -93,9 +93,10 @@ final class ProductController extends AbstractController
         : Response
     {
         $query = $request->query->get('q', '');
+        $suggestions = $suggestionsProvider->get($query);
 
         // Возвращаем JSON с подсказками
-        return $this->json($suggestionsProvider->get($query));
+        return $this->json($suggestions);
     }
 
 }

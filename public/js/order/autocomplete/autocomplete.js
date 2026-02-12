@@ -1,4 +1,4 @@
-import { container } from "./suggestionsContainer";
+import { container } from "./suggestionsContainer.js";
 
 export
 function autocomplete() {
