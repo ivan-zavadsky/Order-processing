@@ -5,7 +5,7 @@
         <th class="col-md">Продукт</th>
         <th class="col-sm">Кол-во</th>
 {#        <th width="150">Цена</th>#}
-        <th class="col-sm">Действие</th>
+        <th class="col-md">Действие</th>
     </tr>
     </thead>
     <tbody data-order-items-target="list">
@@ -14,7 +14,15 @@
         {% for item in form.items %}
             <tr>
                 <td>{{ form_widget(item.product) }}</td>
-                <td>{{ form_widget(item.quantity) }}</td>
+                <td>
+{#                    <div class="input-group" >#}
+{#                        <button class="btn btn-secondary btn-danger" type="button" id="minus">−</button>#}
+                        {{ form_widget(item.quantity) }}
+{#                        <input type="number" class="form-control text-center" value="1" min="1" id="quantity">#}
+{#                        <button class="btn btn-secondary btn-success" type="button" id="plus">+</button>#}
+{#                    </div>#}
+
+                </td>
     {#            <td></td>#}
     {#            <td>{{ form_widget(item.price) }}</td>#}
                 <td>

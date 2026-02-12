@@ -27,7 +27,11 @@ final class OrderController extends AbstractController
     }
 
     #[Route('/new', name: 'app_order_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager
+    )
+        : Response
     {
         $order = new Order();
         $order->setUserId(1);
@@ -80,8 +84,15 @@ final class OrderController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_order_show', methods: ['GET'])]
-    public function show(Order $order): Response
+    public function show(
+        Order $order,
+        OrderRepository $orderRepository
+    )
+        : Response
     {
+        $order = $orderRepository
+            ->findOneWithRelations($order->getId());
+
         return $this->render('order/show.html.twig', [
             'order' => $order,
         ]);
