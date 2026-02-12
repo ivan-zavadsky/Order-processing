@@ -1,5 +1,7 @@
+import { getNext } from './add/next.js';
+
 export
-    function add(maxNumber) {
+    function add(/*maxNumber*/) {
         const tr = document
             .querySelector('#order_items_0_product')
             .parentElement
@@ -7,7 +9,8 @@ export
         ;
         let newTr = tr.cloneNode(true);
         let newSelect = newTr.querySelector('select');
-        maxNumber++;
+        const maxNumber = getNext() + 1;
+        // maxNumber++;
         newSelect.setAttribute(
             'id',
             'order_items_' + (maxNumber) + '_product'

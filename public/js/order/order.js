@@ -1,25 +1,15 @@
-import { add } from './add.js';
-import { getNext } from './add/next.js';
+import { listen } from './listen.js';
 import { rout } from './rout.js';
+import { add } from './add.js';
+import { remove } from './remove.js';
 
 let Orders = {
-    listen: function () {
-        document.addEventListener(
-            'click',
-            (event) => Orders.rout(
-                event,
-                Orders.getNextItemNumber,
-                Orders.addOrderItem,
-                Orders.removeOrderItem,
-            )
-        );
+    listen: function (event) {
+        listen(event, Orders);
     },
     rout:              rout,
-    getNextItemNumber: getNext,
     addOrderItem:      add,
-    removeOrderItem: function (event) {
-        event.target.closest('tr').remove();
-    },
+    removeOrderItem:   remove,
 }
 
 document.addEventListener('DOMContentLoaded', Orders.listen);
