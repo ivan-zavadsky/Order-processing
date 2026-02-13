@@ -19,17 +19,31 @@ final class Version20260210133728 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE product DROP CONSTRAINT fk_d34a04adbfcdf877');
-        $this->addSql('DROP INDEX idx_d34a04adbfcdf877');
-        $this->addSql('ALTER TABLE product DROP my_order_id');
+        $productTable = $schema->getTable('product');
+        if ($productTable->hasColumn('my_order_id')) {
+            $productTable->dropColumn('my_order_id');
+        }
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE product ADD my_order_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE product ADD CONSTRAINT fk_d34a04adbfcdf877 FOREIGN KEY (my_order_id) REFERENCES "order" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('CREATE INDEX idx_d34a04adbfcdf877 ON product (my_order_id)');
+        $productTable = $schema->getTable('product');
+
+        if (!$productTable->hasColumn('my_order_id')) {
+            $productTable->addColumn('my_order_id', 'integer', ['notnull' => false]);
+        }
+
+        if (!$productTable->hasIndex('idx_d34a04adbfcdf877')) {
+            $productTable->addIndex(['my_order_id'], 'idx_d34a04adbfcdf877');
+        }
+
+        if (!$productTable->hasForeignKey('fk_d34a04adbfcdf877')) {
+            $productTable->addForeignKeyConstraint(
+                'order',
+                ['my_order_id'],
+                ['id'],
+                ['name' => 'fk_d34a04adbfcdf877']
+            );
+        }
     }
 }

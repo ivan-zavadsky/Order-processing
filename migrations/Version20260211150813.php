@@ -19,21 +19,67 @@ final class Version20260211150813 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE order_item DROP CONSTRAINT fk_52ea1f09dd842e46');
-        $this->addSql('DROP INDEX idx_52ea1f09dd842e46');
-        $this->addSql('ALTER TABLE order_item RENAME COLUMN position_id TO order_id');
-        $this->addSql('ALTER TABLE order_item ADD CONSTRAINT FK_52EA1F098D9F6D38 FOREIGN KEY (order_id) REFERENCES "order" (id) NOT DEFERRABLE');
-        $this->addSql('CREATE INDEX IDX_52EA1F098D9F6D38 ON order_item (order_id)');
+        $orderItem = $schema->getTable('order_item');
+
+        // Удаляем старое ограничение внешнего ключа и индекс
+        if ($orderItem->hasForeignKey('fk_52ea1f09dd842e46')) {
+            $orderItem->removeForeignKey('fk_52ea1f09dd842e46');
+        }
+
+        if ($orderItem->hasIndex('idx_52ea1f09dd842e46')) {
+            $orderItem->dropIndex('idx_52ea1f09dd842e46');
+        }
+
+        // Переименовываем колонку
+        if ($orderItem->hasColumn('position_id')) {
+            $orderItem->renameColumn('position_id', 'order_id');
+        }
+
+        // Создаем новый индекс и внешнее ограничение
+        if (!$orderItem->hasIndex('IDX_52EA1F098D9F6D38')) {
+            $orderItem->addIndex(['order_id'], 'IDX_52EA1F098D9F6D38');
+        }
+
+        if (!$orderItem->hasForeignKey('FK_52EA1F098D9F6D38')) {
+            $orderItem->addForeignKeyConstraint(
+                'order',
+                ['order_id'],
+                ['id'],
+                ['name' => 'FK_52EA1F098D9F6D38']
+            );
+        }
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE order_item DROP CONSTRAINT FK_52EA1F098D9F6D38');
-        $this->addSql('DROP INDEX IDX_52EA1F098D9F6D38');
-        $this->addSql('ALTER TABLE order_item RENAME COLUMN order_id TO position_id');
-        $this->addSql('ALTER TABLE order_item ADD CONSTRAINT fk_52ea1f09dd842e46 FOREIGN KEY (position_id) REFERENCES "order" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('CREATE INDEX idx_52ea1f09dd842e46 ON order_item (position_id)');
+        $orderItem = $schema->getTable('order_item');
+
+        // Удаляем новое ограничение внешнего ключа и индекс
+        if ($orderItem->hasForeignKey('FK_52EA1F098D9F6D38')) {
+            $orderItem->removeForeignKey('FK_52EA1F098D9F6D38');
+        }
+
+        if ($orderItem->hasIndex('IDX_52EA1F098D9F6D38')) {
+            $orderItem->dropIndex('IDX_52EA1F098D9F6D38');
+        }
+
+        // Возвращаем старое имя колонки
+        if ($orderItem->hasColumn('order_id')) {
+            $orderItem->renameColumn('order_id', 'position_id');
+        }
+
+        // Создаем старый индекс и внешнее ограничение
+        if (!$orderItem->hasIndex('idx_52ea1f09dd842e46')) {
+            $orderItem->addIndex(['position_id'], 'idx_52ea1f09dd842e46');
+        }
+
+        if (!$orderItem->hasForeignKey('fk_52ea1f09dd842e46')) {
+            $orderItem->addForeignKeyConstraint(
+                'order',
+                ['position_id'],
+                ['id'],
+                ['name' => 'fk_52ea1f09dd842e46']
+            );
+        }
     }
 }
