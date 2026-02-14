@@ -1,26 +1,43 @@
 framework:
     messenger:
+        default_bus: messenger.bus.default
         failure_transport: failed
 
         transports:
-            # https://symfony.com/doc/current/messenger.html#transport-configuration
+            # твои существующие async для mailer и notifier
             async:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: messages
+                        type: direct
+                    queues:
+                        messages: ~
                 retry_strategy:
                     max_retries: 3
                     multiplier: 2
-            failed: 'doctrine://default?queue_name=failed'
-            # sync: 'sync://'
 
-        default_bus: messenger.bus.default
+            # очередь для ошибок через Doctrine
+            failed: 'doctrine://default?queue_name=failed'
+
+            # новая очередь RabbitMQ для заказов
+            rabbitmq_orders:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: orders
+                        type: direct
+                    queues:
+                        orders_queue: ~
 
         buses:
             messenger.bus.default: []
 
         routing:
+            # твои существующие маршруты
             Symfony\Component\Mailer\Messenger\SendEmailMessage: async
             Symfony\Component\Notifier\Message\ChatMessage: async
             Symfony\Component\Notifier\Message\SmsMessage: async
 
-            # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+            # маршрутизация твоего сообщения в RabbitMQ
+            App\Message\OrderCreatedMessage: rabbitmq_orders

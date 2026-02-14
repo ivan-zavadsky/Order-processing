@@ -1,27 +1,26 @@
-FROM php:8.2-fpm
+FROM php:8.4-fpm
 
-# Install system dependencies
+# Устанавливаем зависимости для PHP и Symfony
 RUN apt-get update && apt-get install -y \
-    libcurl4-openssl-dev \
-    pkg-config \
-    libssl-dev \
+    libicu-dev \
     libonig-dev \
     libzip-dev \
-    unzip
+    unzip \
+    git \
+    curl \
+    librabbitmq-dev \
+    && docker-php-ext-install intl mbstring pdo pdo_mysql zip opcache \
+    && pecl install amqp \
+    && docker-php-ext-enable amqp \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql curl mbstring
+# Устанавливаем Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-RUN apt-get update
-RUN apt-get install bash
-RUN apt-get install curl
-RUN yes | apt-get install zip
+WORKDIR /var/www/html
 
-RUN curl -s https://getcomposer.org/installer | php
-RUN mv composer.phar /usr/local/bin/composer
+# Копируем приложение
+COPY . .
 
-#RUN docker exec -it mik-3-php-fpm-1 composer create-project --prefer-dist yiisoft/yii2-app-basic app
-
-#COPY script.sh /script.sh
-#RUN chmod +x /script.sh
-#ENTRYPOINT ["/script.sh"]
-# Default command for the container
+# Устанавливаем зависимости через Composer
+RUN #composer install --no-interaction --optimize-autoloader

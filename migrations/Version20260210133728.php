@@ -21,6 +21,7 @@ final class Version20260210133728 extends AbstractMigration
     {
         $productTable = $schema->getTable('product');
         if ($productTable->hasColumn('my_order_id')) {
+            $productTable->dropForeignKey('FK_D34A04ADBFCDF877');
             $productTable->dropColumn('my_order_id');
         }
     }

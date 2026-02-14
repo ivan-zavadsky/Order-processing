@@ -9,11 +9,14 @@ use App\Form\OrderItemType;
 use App\Form\OrderType;
 use App\Form\ProductType;
 use App\Repository\OrderRepository;
+use App\Service\Order\OrderDto;
+use App\Service\Order\OrderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/order')]
 final class OrderController extends AbstractController
@@ -29,12 +32,11 @@ final class OrderController extends AbstractController
     #[Route('/new', name: 'app_order_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     )
         : Response
     {
-        $order = new Order();
-        $order->setUserId(1);
+        $order = new Order(1);
         $orderItem = new OrderItem();
         $orderItem->setQuantity(1);
         $order->addItem($orderItem);
@@ -44,7 +46,7 @@ final class OrderController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $data = $form->getData()->getItems();
-            $order = new Order();
+            $order = new Order(1);
             $order->setUserId(1);
 
             foreach ($data as $item) {

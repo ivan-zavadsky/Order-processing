@@ -12,6 +12,12 @@ class OrderDto
         #[Assert\NotBlank]
         #[Assert\Positive]
         public int $userId,
+        /**
+         * @var OrderItemDto[]
+         */
+        #[Assert\NotBlank]
+        #[Assert\Valid]
         public array $items,
+
     ) {}
 }

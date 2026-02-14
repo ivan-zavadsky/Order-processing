@@ -3,25 +3,26 @@
 namespace App\Controller\Api;
 
 use App\Service\Order\OrderService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\Order\OrderDto;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Serializer;
+use \Symfony\Component\Messenger\Exception\ExceptionInterface
+    as MessengerExceptionInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/order')]
 final class OrderController extends AbstractController
 {
     /**
-     * @throws ExceptionInterface
+     * @throws ExceptionInterface|MessengerExceptionInterface
      */
     #[Route('/new', name: 'app_api_order_new', methods: ['POST'])]
     public function new(
         Request $request,
-        Serializer $serializer,
+        SerializerInterface $serializer,
         OrderService $orderService,
     )
         : JsonResponse

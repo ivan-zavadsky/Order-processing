@@ -1,5 +1,5 @@
-README (must have)
-Обязательно:
+README
+
 ## Tech stack
 - PHP 8.4
 - Symfony 7

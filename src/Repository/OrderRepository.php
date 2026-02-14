@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -11,17 +12,45 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class OrderRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    private EntityManagerInterface $em;
+
+    /**
+     * @param ManagerRegistry $registry
+     * @param EntityManagerInterface $em
+     */
+    public function __construct(
+        ManagerRegistry $registry,
+        EntityManagerInterface $em
+    ) {
         parent::__construct($registry, Order::class);
+        $this->em = $em;
     }
 
-        /**
-         * @return Order Returns an array of Order objects
-         */
+    public function save(Order $order): void
+    {
+//        foreach ($order->getItems() as $item) {
+//
+//            echo '<pre>';
+//            var_dump(
+//                $item->getPrice()
+//            );
+//            echo '</pre>';
+//            die;
+//
+//            $this->em->persist($item);
+//        }
+        $this->em->persist($order);
+        $this->em->flush();
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     */
         public function findOneWithRelations(
             int $id
         )
+            : array
 //            : Order
         {
             return $this->createQueryBuilder('o')
@@ -43,13 +72,4 @@ class OrderRepository extends ServiceEntityRepository
             ;
         }
 
-    //    public function findOneBySomeField($value): ?Order
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }
