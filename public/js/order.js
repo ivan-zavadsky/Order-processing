@@ -1,8 +1,8 @@
-import { listen } from './listen.js';
-import { rout } from './rout.js';
-import { add } from './add.js';
-import { remove } from './remove.js';
-import { autocomplete } from './autocomplete/autocomplete.js';
+import { listen } from './order/listen.js';
+import { rout } from './order/rout.js';
+import { add } from './order/add.js';
+import { remove } from './order/remove.js';
+import { autocomplete } from './order/autocomplete/autocomplete.js';
 
 let Orders = {
     listen: function (event) {

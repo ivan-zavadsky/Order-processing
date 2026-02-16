@@ -5,18 +5,17 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\Product;
-use App\Form\OrderItemType;
 use App\Form\OrderType;
-use App\Form\ProductType;
+use App\Message\OrderCreatedMessage;
+use App\MessageHandler\OrderCreatedHandler;
 use App\Repository\OrderRepository;
-use App\Service\Order\OrderDto;
-use App\Service\Order\OrderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 #[Route('/order')]
 final class OrderController extends AbstractController
@@ -85,7 +84,7 @@ final class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_order_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_order_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(
         Order $order,
         OrderRepository $orderRepository
@@ -100,7 +99,7 @@ final class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_order_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_order_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, Order $order, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(OrderType::class, $order);
@@ -118,7 +117,7 @@ final class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_order_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_order_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function delete(Request $request, Order $order, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$order->getId(), $request->getPayload()->getString('_token'))) {
@@ -127,5 +126,45 @@ final class OrderController extends AbstractController
         }
 
         return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/check', name: 'app_order_check', methods: ['GET'])]
+    public function check(
+        Request $request,
+        OrderRepository $orderRepository,
+        CacheInterface $cache,
+    )
+        : Response
+    {
+        $lastId = $orderRepository->findLastId();
+        $order = $cache->get(
+            'order_' . $lastId,
+            function (ItemInterface $item) {
+                return null;
+        });
+//dump($lastId, $order);
+//die;
+        return $this->render('order/check.html.twig', [
+            'orders' => [$order],
+        ]);
+    }
+    #[Route('/dump_order_handler', name: 'app_order_dump_order_handler', methods: ['GET'])]
+    public function dump_order_handler(
+        Request $request,
+        OrderRepository $orderRepository,
+        OrderCreatedHandler $orderCreatedHandler,
+    )
+//        : Response
+    {
+        $lastId = $orderRepository->findLastId();
+        $message = new OrderCreatedMessage(
+            orderId: $lastId,
+            userId:  1
+        );
+        $orderCreatedHandler($message);
+
+//        return $this->render('order/check.html.twig', [
+//            'orders' => [$order],
+//        ]);
     }
 }

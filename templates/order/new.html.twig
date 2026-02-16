@@ -16,10 +16,11 @@
         </a>
     </div>
     {% block javascripts %}
-        <script
-            src="{{ asset('js/order/order.js') }}"
-            type="module"
-        ></script>
+{#        <script#}
+{#            src="{{ asset('js/order.js') }}"#}
+{#            type="module"#}
+{#        ></script>#}
+        <script src="{{ asset('new.js') }}"></script>
     {% endblock %}
 
 {% endblock %}

@@ -47,29 +47,67 @@ class OrderRepository extends ServiceEntityRepository
      * @param int $id
      * @return array
      */
-        public function findOneWithRelations(
-            int $id
-        )
-            : array
+    public function findOneWithRelations(
+        int $id
+    )
+        : array
 //            : Order
-        {
-            return $this->createQueryBuilder('o')
-                ->select([
-                    'o.id',
-                    'i.id AS orderItemId',
-                    'p.name',
-                    'p.price',
-                    'i.quantity'
-                ])
-                ->leftJoin('o.items', 'i')
-                ->leftJoin('i.product', 'p')
-                ->where('o.id=:id')
-                ->setParameter('id', $id)
-                ->orderBy('o.id', 'ASC')
-                ->setMaxResults(10)
-                ->getQuery()
-                ->getScalarResult()
-            ;
-        }
+    {
+        return $this->createQueryBuilder('o')
+            ->select([
+                'o.id',
+                'i.id AS orderItemId',
+                'p.name',
+                'p.price',
+                'i.quantity'
+            ])
+            ->leftJoin('o.items', 'i')
+            ->leftJoin('i.product', 'p')
+            ->where('o.id=:id')
+            ->setParameter('id', $id)
+            ->orderBy('o.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getScalarResult()
+        ;
+    }
+
+    public function findObjectWithRelations(
+        int $id
+    )
+//        : array
+        : Order
+    {
+        return $this->createQueryBuilder('o')
+//            ->select([
+//                'o.id',
+//                'i.id AS orderItemId',
+//                'p.name',
+//                'p.price',
+//                'i.quantity'
+//            ])
+            ->leftJoin('o.items', 'i')
+            ->leftJoin('i.product', 'p')
+            ->where('o.id=:id')
+            ->setParameter('id', $id)
+            ->orderBy('o.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getSingleResult()
+        ;
+    }
+
+    public function findLastId()
+    {
+        return $this->createQueryBuilder('o')
+            ->select([
+                'o.id',
+            ])
+            ->orderBy('o.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
 
 }
