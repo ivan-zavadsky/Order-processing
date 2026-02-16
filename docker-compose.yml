@@ -1,13 +1,21 @@
-version: '3.9'
 services:
     php-fpm:
         build:
             context: ./docker
             dockerfile: Dockerfile
+        environment:
+            REDIS_URL: ${REDIS_URL}
         volumes:
             - .:/var/www/html
             - ./docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
             - ./docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+        depends_on:
+            - mysql-db
+        command: >
+            sh -c "
+              php bin/console doctrine:migrations:migrate --no-interaction &&
+              php-fpm
+            "
 
     nginx:
         build:
@@ -23,7 +31,7 @@ services:
             - rabbitmq
 
     mysql-db:
-        image: mysql:8.0.36
+        image: mysql:9.6
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -44,3 +52,15 @@ services:
         environment:
             RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
             RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+
+    redis:
+        image: redis:7-alpine
+        container_name: project_redis
+        restart: unless-stopped
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
+
+volumes:
+    redis_data:

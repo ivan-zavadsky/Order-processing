@@ -10,8 +10,19 @@ RUN apt-get update && apt-get install -y \
     curl \
     librabbitmq-dev \
     && docker-php-ext-install intl mbstring pdo pdo_mysql zip opcache \
+    \
+    # AMQP \
     && pecl install amqp \
     && docker-php-ext-enable amqp \
+    \
+    # Redis \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    \
+    # Xdebug \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    \
     && rm -rf /var/lib/apt/lists/*
 
 # Устанавливаем Composer
