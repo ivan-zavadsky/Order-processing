@@ -7,8 +7,7 @@ export function listen(event, Orders) {
         'click',
         (event) => Orders.rout(
             event,
-            Orders.addOrderItem,
-            Orders.removeOrderItem,
+            Orders
         )
     );
 }

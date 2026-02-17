@@ -128,6 +128,27 @@ final class OrderController extends AbstractController
         return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/delete-selected', name: 'app_order_delete_selected', methods: ['POST'])]
+    public function deleteSelected(
+        Request $request,
+        OrderRepository $orderRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $data = json_decode($request->getContent(), true);
+        $ids = $data['ids'] ?? [];
+
+        foreach ($ids as $id) {
+            $order = $orderRepository->find($id);
+            if ($order) {
+                $entityManager->remove($order);
+            }
+        }
+
+        $entityManager->flush();
+
+        return new Response(null, Response::HTTP_NO_CONTENT);
+    }
+
     #[Route('/check', name: 'app_order_check', methods: ['GET'])]
     public function check(
         Request $request,

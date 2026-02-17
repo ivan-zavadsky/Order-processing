@@ -1,6 +1,6 @@
-**Useful commands:**
+# Useful commands
 
-Migrations:
+# Migrations
 
 ````bash
 docker compose exec php-fpm php bin/console \
@@ -10,11 +10,11 @@ make:migration
 docker compose exec php-fpm php bin/console \
 doctrine:migrations:migrate --no-interaction
 ````
-Cache:
+# Cache
 ````bash
 docker exec -it processing-php-fpm-1 bash php bin/console cache:clear
 ````
-Rabbit
+# Rabbit
 ````bash
 docker exec -it processing-php-fpm-1 bash 
 php bin/console messenger:consume rabbitmq_orders -vv
@@ -23,7 +23,7 @@ php bin/console messenger:consume rabbitmq_orders -vv
 docker compose exec php-fpm php bin/console \
 messenger:consume rabbitmq_orders --time-limit=3600 -vvv
 ````
-*Docker*
+# Docker
 ````bash
 docker compose down
 docker compose build --no-cache
@@ -38,7 +38,7 @@ docker compose up -d
 ````bash
 docker ps
 ````
-**Bash containers:**
+# Bash containers
 ````bash
 docker exec -it project_redis redis-cli
 ````

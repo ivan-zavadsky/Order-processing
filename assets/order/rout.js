@@ -1,19 +1,23 @@
 /**
  * Роутер событий, который выполняет колбеки в зависимости от значения action в dataset
  * @param {Event} event - объект события
- * @param {Function} getNextNumber - функция для получения следующего номера
- * @param {Function} addItem - функция для добавления элемента
- * @param {Function} removeItem
+ * @param Orders
  */
-export function rout(event, /*getNextNumber,*/ addItem, removeItem) {
+export function rout(event, Orders) {
     const action = event.target.dataset.action;
     switch (action) {
         case 'order-items#add':
-            // const maxNumber = getNextNumber();
-            addItem(/*maxNumber*/);
+            Orders.addOrderItem();
             break;
         case 'order-items#remove':
-            removeItem(event);
+            Orders.removeOrderItem(event);
+            break;
+        case 'check-all':
+            Orders.handleCheckAll(event);
+            break;
+        case 'delete-selected':
+            Orders.deleteSelectedOrders(event);
+            break;
     }
 }
 
