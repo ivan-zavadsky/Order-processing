@@ -26,21 +26,13 @@ class OrderRepository extends ServiceEntityRepository
         $this->em = $em;
     }
 
-    public function save(Order $order): void
+    public function save(Order $order)
+        : int
     {
-//        foreach ($order->getItems() as $item) {
-//
-//            echo '<pre>';
-//            var_dump(
-//                $item->getPrice()
-//            );
-//            echo '</pre>';
-//            die;
-//
-//            $this->em->persist($item);
-//        }
         $this->em->persist($order);
         $this->em->flush();
+
+        return $order->getId();
     }
 
     /**

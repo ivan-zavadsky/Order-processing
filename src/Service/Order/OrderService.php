@@ -39,7 +39,8 @@ readonly class OrderService
             $order->addItem($orderItem);
         }
         $order->setStatus(OrderStatus::NEW);
-        $this->orderRepository->save($order);
+        $orderId = $this->orderRepository->save($order);
+        $order->setId($orderId);
 
         $this->bus->dispatch(
             new OrderCreatedMessage($order->getId(), $order->getUserId())

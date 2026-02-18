@@ -36,4 +36,4 @@ rabbit:
 # ==================== Cache ==============================
 
 clear:
-	docker exec -it processing-php-fpm-1 bash php bin/console cache:clear
+	docker compose exec php-fpm php bin/console cache:clear
