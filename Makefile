@@ -11,7 +11,12 @@ restart:
 stop:
 	docker stop $(docker ps -a -q)
 up:
+	composer install
+	docker stop $(docker ps -a -q)
+	docker rm $(docker ps -a -q)
 	docker compose up -d
+	docker compose exec php-fpm php bin/console \
+    messenger:consume rabbitmq_orders --time-limit=3600 -vvv
 
 # ==================== Bash containers ==============================
 
