@@ -11,11 +11,13 @@ services:
             - ./docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
         depends_on:
             - mysql-db
-        command: >
-            sh -c "
-              php bin/console doctrine:migrations:migrate --no-interaction &&
-              php-fpm
-            "
+#        command: >
+#            sh -c "
+#              php bin/console doctrine:migrations:migrate --no-interaction &&
+#              php-fpm
+#            "
+        networks:
+            - app
 
     nginx:
         build:
@@ -29,6 +31,8 @@ services:
             - php-fpm
             - mysql-db
             - rabbitmq
+        networks:
+            - app
 
     mysql-db:
         image: mysql:9.6
@@ -42,6 +46,8 @@ services:
         command: --init-file /var/www/html/sql/init.sql
         volumes:
             - ./docker/sql:/var/www/html/sql
+        networks:
+            - app
 
     rabbitmq:
         image: rabbitmq:3-management
@@ -52,6 +58,8 @@ services:
         environment:
             RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
             RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+        networks:
+            - app
 
     redis:
         image: redis:7-alpine
@@ -61,6 +69,11 @@ services:
             - "6379:6379"
         volumes:
             - redis_data:/data
+        networks:
+            - app
 
 volumes:
     redis_data:
+
+networks:
+    app:

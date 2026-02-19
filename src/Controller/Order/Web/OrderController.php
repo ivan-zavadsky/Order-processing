@@ -109,37 +109,4 @@ final class OrderController extends AbstractController
         ($this->dumpOrderHandlerAction)($request, $orderRepository, $orderCreatedHandler);
     }
 
-//    #[Route('/new_bulk', name: 'app_order_new_bulk', methods: ['GET'])]
-//    public function newBulk(
-//        Request $request,
-//    )
-////        : void
-//    {
-//        $payload = json_encode(
-//<<<JSON
-//{
-//	"userId": 1,
-//	"items": [
-//		{
-//            "product": "iPhone 17",
-//			"quantity": 1
-//		}
-//	]
-//}
-//JSON
-//        );
-//
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL, "/api/order/new");
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json')); // Set the content type header
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//        $response = curl_exec($ch);
-//        curl_close($ch);
-//
-//        return new Response('', Response::HTTP_SEE_OTHER, [
-//            'Location' => '/order'
-//        ]);
-//
-//    }
 }

@@ -10,15 +10,19 @@ restart:
 	docker compose up -d --build
 stop:
 	docker stop $(docker ps -a -q)
+
+	#composer install
 up: # Deploy project
-	composer install
-	docker stop $(docker ps -a -q)
-	docker rm $(docker ps -a -q)
+	-@docker stop $$(docker ps -a -q) 2>/dev/null || true
+	-@docker rm $$(docker ps -a -q) 2>/dev/null || true
 	docker compose up -d
-	docker compose exec php-fpm php bin/console \
-	doctrine:fixtures:load --append
-	docker compose exec php-fpm php bin/console \
-    messenger:consume rabbitmq_orders
+		docker compose exec php-fpm sh -c '\
+    	  echo "Waiting for DB..."; \
+    	  until nc -z mysql-db 3306; do sleep 1; done; \
+    	  php bin/console doctrine:migrations:migrate --no-interaction \
+    	'
+	docker compose exec php-fpm php bin/console doctrine:fixtures:load
+	@echo "Project up. Запустите consumer отдельно: make rabbit"
 
 # ==================== Bash containers ==============================
 

@@ -7,9 +7,9 @@ export function sendSeveralOrders(event) {
     let orders = [];
     let maxOrdersNumber = Math.floor(Math.random() * (5)) + 1;
     for (let i = 1; i <= maxOrdersNumber; i++) {
-        let userId = Math.floor(Math.random() * (100)) + 1;
+        let userId = Math.floor(Math.random() * (10)) + 1;
         let items = [];
-        let validProductIds = [54, 55, 56, 57, 58, 59];
+        let validProductIds = [2, 3, 4, 5, 6, 7];
         let maxProductsNumber = Math.floor(Math.random() * (3)) + 1
         for (let j = 1; j <= maxProductsNumber; j++) {
             let productId = validProductIds[Math.floor(Math.random()*validProductIds.length)];

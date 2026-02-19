@@ -34,6 +34,10 @@ readonly class OrderService
             $orderItem = new OrderItem();
             $product = $this->productRepository
                 ->findOneById($item->productId);
+            if (!$product) {
+                throw new \Exception('Product id='
+                . $item->productId . ' not found');
+            }
             $orderItem->setProduct($product);
             $orderItem->setQuantity($item->quantity);
             $orderItem->setPrice($product->getPrice());

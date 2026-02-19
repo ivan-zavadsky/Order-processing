@@ -38,7 +38,7 @@
                     <th class="text-center">Id</th>
                     <th class="text-center">Status</th>
 
-                    <th class="text-center">Order details</th>
+                    <th class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,12 +51,11 @@
                     </td>
                     <td>{{ order.id }}</td>
                     <td>{{ order.status.value }}</td>
-                    <td>
-                        User: {{ order.userId }}<br>
-                        {% for item in order.items%}
-                            {{ item.product.name }} x {{ item.quantity }}<br>
-                        {% endfor %}
-                    </td>
+                        {% include 'order/action_buttons.html.twig' %}
+{#                        User: {{ order.userId }}<br>#}
+{#                        {% for item in order.items%}#}
+{#                            {{ item.product.name }} x {{ item.quantity }}<br>#}
+{#                        {% endfor %}#}
                 </tr>
             {% else %}
                 <tr>

@@ -35,29 +35,25 @@ readonly class OrderCreatedHandler
         $order->setStatus(OrderStatus::PROCESSING);
         $this->orderRepository->save($order);
 
-        $orderDto = new \stdClass();
-        $orderDto->id = $order->getId();
-        $orderDto->userId = $order->getUserId();
-        $orderDto->status = $order->getStatus()->value;
-        $orderDto->items = [];
+        // Формируем данные в том же формате, что и в findOneWithRelations (getScalarResult)
+        $orderData = [];
         foreach ($order->getItems() as $item) {
-            $itemDto = new \stdClass();
-            $itemDto->id = $item->getId();
-            $itemDto->product = $item->getProduct()->getName();
-            $itemDto->price = $item->getProduct()->getPrice();
-            $itemDto->quantity = $item->getQuantity();
-
-            $orderDto->items[] = $itemDto;
+            $orderData[] = [
+                'id' => $order->getId(),
+                'orderItemId' => $item->getId(),
+                'name' => $item->getProduct()->getName(),
+                'price' => $item->getProduct()->getPrice(),
+                'quantity' => $item->getQuantity()
+            ];
         }
 
-
-        //Тут мы именно сохраняем в Редис
+        // Сохраняем данные в кеш
         $this->cache->get(
             'order_' . $order->getId(),
-            function (ItemInterface $item) use ($orderDto) {
+            function (ItemInterface $item) use ($orderData) {
                 $item->expiresAfter(3600); // 1 час
 
-                return $orderDto;
+                return $orderData;
             }
         );
 

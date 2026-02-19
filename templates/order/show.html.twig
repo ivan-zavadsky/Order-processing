@@ -19,8 +19,8 @@
             {% for orderItem in order %}
             <tr>
                 <td>{{ orderItem.name }}</td>
-                <td>{{ orderItem.quantity }}</td>
                 <td>{{ orderItem.price }}</td>
+                <td>{{ orderItem.quantity }}</td>
                 <td>{{ orderItem.quantity * orderItem.price }}</td>
 {#                <td>{{ order.id }}</td>#}
             </tr>

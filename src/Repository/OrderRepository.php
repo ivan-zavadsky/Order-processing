@@ -67,17 +67,9 @@ class OrderRepository extends ServiceEntityRepository
     public function findObjectWithRelations(
         int $id
     )
-//        : array
         : Order
     {
         return $this->createQueryBuilder('o')
-//            ->select([
-//                'o.id',
-//                'i.id AS orderItemId',
-//                'p.name',
-//                'p.price',
-//                'i.quantity'
-//            ])
             ->leftJoin('o.items', 'i')
             ->leftJoin('i.product', 'p')
             ->where('o.id=:id')

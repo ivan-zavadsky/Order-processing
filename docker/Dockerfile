@@ -25,6 +25,8 @@ RUN apt-get update && apt-get install -y \
     \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
+
 # Устанавливаем Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -34,4 +36,4 @@ WORKDIR /var/www/html
 COPY . .
 
 # Устанавливаем зависимости через Composer
-RUN #composer install --no-interaction --optimize-autoloader
+RUN composer install --no-interaction --optimize-autoloader
