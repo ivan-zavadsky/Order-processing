@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     librabbitmq-dev \
-    && docker-php-ext-install intl mbstring pdo pdo_mysql zip opcache \
+    && docker-php-ext-install intl mbstring pdo pdo_mysql \
+    zip opcache sockets\
     \
     # AMQP \
     && pecl install amqp \
@@ -25,15 +26,9 @@ RUN apt-get update && apt-get install -y \
     \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
+RUN git config --global --add safe.directory /var/www/html
 
 # Устанавливаем Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
-
-# Копируем приложение
-COPY . .
-
-# Устанавливаем зависимости через Composer
-RUN composer install --no-interaction --optimize-autoloader

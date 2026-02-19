@@ -16,11 +16,11 @@ up: # Deploy project
 	-@docker stop $$(docker ps -a -q) 2>/dev/null || true
 	-@docker rm $$(docker ps -a -q) 2>/dev/null || true
 	docker compose up -d
-		docker compose exec php-fpm sh -c '\
-    	  echo "Waiting for DB..."; \
-    	  until nc -z mysql-db 3306; do sleep 1; done; \
-    	  php bin/console doctrine:migrations:migrate --no-interaction \
-    	'
+	docker compose exec php-fpm composer install
+	docker compose exec php-fpm sh -c 'echo "Waiting for DB..."; \
+	until php -r "try { new PDO(\"mysql:host=mysql-db;dbname=db\",\"user\",\"pass\"); } catch(Exception $e) { exit(1); }"; \
+	do sleep 1; done; \
+	php bin/console doctrine:migrations:migrate --no-interaction'
 	docker compose exec php-fpm php bin/console doctrine:fixtures:load
 	@echo "Project up. Запустите consumer отдельно: make rabbit"
 
