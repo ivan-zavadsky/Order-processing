@@ -1,14 +1,18 @@
 <?php
 
-namespace App\Controller\Order\Actions;
+namespace App\Controller\Order\Web\Actions;
 
 use App\Message\OrderCreatedMessage;
 use App\MessageHandler\OrderCreatedHandler;
 use App\Repository\OrderRepository;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 
 class DumpOrderHandlerAction
 {
+    /**
+     * @throws InvalidArgumentException
+     */
     public function __invoke(
         Request $request,
         OrderRepository $orderRepository,

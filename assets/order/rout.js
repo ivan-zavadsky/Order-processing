@@ -18,6 +18,9 @@ export function rout(event, Orders) {
         case 'delete-selected':
             Orders.deleteSelectedOrders(event);
             break;
+        case 'orders':
+            Orders.sendSeveralOrders(event);
+            break;
     }
 }
 

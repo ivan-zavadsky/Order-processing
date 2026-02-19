@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Order;
+namespace App\Controller\Order\Web;
 
-use App\Controller\Order\Actions\CheckAction;
-use App\Controller\Order\Actions\DeleteAction;
-use App\Controller\Order\Actions\DeleteSelectedAction;
-use App\Controller\Order\Actions\DumpOrderHandlerAction;
-use App\Controller\Order\Actions\EditAction;
-use App\Controller\Order\Actions\IndexAction;
-use App\Controller\Order\Actions\NewAction;
-use App\Controller\Order\Actions\ShowAction;
+use App\Controller\Order\Web\Actions\CheckAction;
+use App\Controller\Order\Web\Actions\DeleteAction;
+use App\Controller\Order\Web\Actions\DeleteSelectedAction;
+use App\Controller\Order\Web\Actions\DumpOrderHandlerAction;
+use App\Controller\Order\Web\Actions\EditAction;
+use App\Controller\Order\Web\Actions\IndexAction;
+use App\Controller\Order\Web\Actions\NewAction;
+use App\Controller\Order\Web\Actions\ShowAction;
 use App\Entity\Order;
 use App\MessageHandler\OrderCreatedHandler;
 use App\Repository\OrderRepository;
@@ -21,6 +21,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Cache\CacheInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 #[Route('/order')]
 final class OrderController extends AbstractController
@@ -37,6 +40,11 @@ final class OrderController extends AbstractController
     ) {
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     #[Route(name: 'app_order_index', methods: ['GET'])]
     public function index(OrderRepository $orderRepository): Response
     {
@@ -100,4 +108,38 @@ final class OrderController extends AbstractController
     ): void {
         ($this->dumpOrderHandlerAction)($request, $orderRepository, $orderCreatedHandler);
     }
+
+//    #[Route('/new_bulk', name: 'app_order_new_bulk', methods: ['GET'])]
+//    public function newBulk(
+//        Request $request,
+//    )
+////        : void
+//    {
+//        $payload = json_encode(
+//<<<JSON
+//{
+//	"userId": 1,
+//	"items": [
+//		{
+//            "product": "iPhone 17",
+//			"quantity": 1
+//		}
+//	]
+//}
+//JSON
+//        );
+//
+//        $ch = curl_init();
+//        curl_setopt($ch, CURLOPT_URL, "/api/order/new");
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json')); // Set the content type header
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//        $response = curl_exec($ch);
+//        curl_close($ch);
+//
+//        return new Response('', Response::HTTP_SEE_OTHER, [
+//            'Location' => '/order'
+//        ]);
+//
+//    }
 }

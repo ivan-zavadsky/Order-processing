@@ -10,13 +10,15 @@ restart:
 	docker compose up -d --build
 stop:
 	docker stop $(docker ps -a -q)
-up:
+up: # Deploy project
 	composer install
 	docker stop $(docker ps -a -q)
 	docker rm $(docker ps -a -q)
 	docker compose up -d
 	docker compose exec php-fpm php bin/console \
-    messenger:consume rabbitmq_orders --time-limit=3600 -vvv
+	doctrine:fixtures:load --append
+	docker compose exec php-fpm php bin/console \
+    messenger:consume rabbitmq_orders
 
 # ==================== Bash containers ==============================
 
@@ -25,12 +27,19 @@ redis:
 php:
 	docker exec -it processing-php-fpm-1 bash
 
+# ==================== Entity =======================================
+
+entity:
+	docker compose exec php-fpm php bin/console \
+	make:entity
+
 # ==================== Migrations ===================================
 
 create: # Create migration
 	docker compose exec php-fpm php bin/console make:migration
 migrate: # Migrate
-	docker compose exec php-fpm php bin/console doctrine:migrations:migrate --no-interaction
+	docker compose exec php-fpm php bin/console \
+	doctrine:migrations:migrate --no-interaction
 
 # ==================== Rabbit =======================================
 
@@ -42,3 +51,9 @@ rabbit:
 
 clear:
 	docker compose exec php-fpm php bin/console cache:clear
+
+# ==================== Fixtures ==============================
+
+load: # Load fixtures
+	docker compose exec php-fpm php bin/console \
+	doctrine:fixtures:load

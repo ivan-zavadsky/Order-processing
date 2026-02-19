@@ -5,21 +5,25 @@ namespace App\DataFixtures;
 use App\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Faker;
 
-class AppFixtures extends Fixture
+class ProductFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $faker = Faker\Factory::create();
+        $data = json_decode(
+            file_get_contents(__DIR__.'/data/products.json'),
+            true
+        );
 
-        for ($i = 1; $i <= 10; $i++) {
+        foreach ($data as $item) {
             $product = new Product();
-            $product->setName(ucfirst($faker->word));
-            $product->setPrice($faker->numberBetween(100, 10000)/100);
-            $product->setSku($faker->postcode);
+            $product->setName($item['name']);
+            $product->setPrice($item['price']);
+            $product->setSku($item['sku']);
             $manager->persist($product);
         }
+
         $manager->flush();
+
     }
 }

@@ -7,7 +7,6 @@ namespace App\Form\DataTransformer;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class ProductToNameTransformer implements DataTransformerInterface
 {

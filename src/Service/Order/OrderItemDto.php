@@ -9,7 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class OrderItemDto
 {
     #[Assert\NotBlank]
-    public string $product;
+    #[Assert\Positive]
+    public int $productId;
 
     #[Assert\NotBlank]
     #[Assert\Positive]

@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\Order\Api;
 
+use App\Service\Order\OrderDto;
 use App\Service\Order\OrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use App\Service\Order\OrderDto;
+use Symfony\Component\Messenger\Exception\ExceptionInterface as MessengerExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use \Symfony\Component\Messenger\Exception\ExceptionInterface
-    as MessengerExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/order')]
@@ -38,6 +37,5 @@ final class OrderController extends AbstractController
             'status' => $order->getStatus(),
         ]);
     }
-
 
 }

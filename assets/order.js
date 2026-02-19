@@ -4,6 +4,7 @@ import { add } from './order/add.js';
 import { remove } from './order/remove.js';
 import { autocomplete } from './order/autocomplete/autocomplete.js';
 import { handleCheckAll, deleteSelectedOrders } from './order/checkbox.js';
+import { sendSeveralOrders } from './order/send.js';
 
 export let Orders = {
     listen: function (event) {
@@ -15,5 +16,6 @@ export let Orders = {
     productAutocomplete: autocomplete,
     handleCheckAll:      handleCheckAll,
     deleteSelectedOrders: deleteSelectedOrders,
+    sendSeveralOrders:   sendSeveralOrders,
 }
 

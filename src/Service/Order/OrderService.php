@@ -28,11 +28,12 @@ readonly class OrderService
     public function create(#[MapRequestPayload] OrderDto $dto)
         : Order
     {
+        //todo: check if user id exists
         $order = new Order($dto->userId);
         foreach ($dto->items as $item) {
             $orderItem = new OrderItem();
             $product = $this->productRepository
-                ->findOneByName($item->product);
+                ->findOneById($item->productId);
             $orderItem->setProduct($product);
             $orderItem->setQuantity($item->quantity);
             $orderItem->setPrice($product->getPrice());

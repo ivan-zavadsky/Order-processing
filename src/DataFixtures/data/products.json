@@ -1,0 +1,32 @@
+[
+    {
+        "name": "iPhone 17",
+        "price": 1100.85,
+        "sku": "SKU-1"
+    },
+    {
+        "name": "iPad",
+        "price": 500,
+        "sku": "SKU-2"
+    },
+    {
+        "name": "iPods",
+        "price": 30,
+        "sku": "SKU-3"
+    },
+    {
+        "name": "Xerox",
+        "price": 2050.45,
+        "sku": "SKU-4"
+    },
+    {
+        "name": "Samsung TV set",
+        "price": 750.05,
+        "sku": "SKU-5"
+    },
+    {
+        "name": "Dell PC",
+        "price": 1535.85,
+        "sku": "SKU-6"
+    }
+]

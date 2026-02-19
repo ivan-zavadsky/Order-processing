@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Order\Actions;
+namespace App\Controller\Order\Web\Actions;
 
 use App\Repository\OrderRepository;
 use Symfony\Component\HttpFoundation\Request;

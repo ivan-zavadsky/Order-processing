@@ -27,21 +27,32 @@ class ProductRepository extends ServiceEntityRepository
             ;
         }
 
+        public function findOneById($id)
+        {
+            return $this->createQueryBuilder('p')
+                ->andWhere( 'p.id = :id')
+                ->setParameter('id', $id)
+//                ->setMaxResults(10)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+        }
+
         /**
          * Ищет продукты по названию без учета регистра
          *
          * @param string $query Текст для поиска
          * @return array Массив продуктов
          */
-        public function findHint(string $query): array
-        {
-            return $this->createQueryBuilder('p')
-                ->where('LOWER(p.name) LIKE LOWER(:query)')
-                ->setParameter('query', '%' . $query . '%')
-                ->orderBy('p.name', 'ASC')
-                ->setMaxResults(10)
-                ->getQuery()
-                ->getResult();
-        }
+//        public function findHint(string $query): array
+//        {
+//            return $this->createQueryBuilder('p')
+//                ->where('LOWER(p.name) LIKE LOWER(:query)')
+//                ->setParameter('query', '%' . $query . '%')
+//                ->orderBy('p.name', 'ASC')
+//                ->setMaxResults(10)
+//                ->getQuery()
+//                ->getResult();
+//        }
 
 }
