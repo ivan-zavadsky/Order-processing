@@ -13,11 +13,11 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class ShowAction
+readonly class ShowAction
 {
     public function __construct(
-        private readonly Environment $twig,
-        private readonly CacheInterface $cache
+        private Environment    $twig,
+        private CacheInterface $cache
     ) {
     }
 
@@ -34,9 +34,13 @@ class ShowAction
         $cacheKey = 'order_' . $order->getId();
 
         // Сначала пытаемся получить данные из кеша
-        $orderData = $this->cache->get($cacheKey, function (ItemInterface $item) use ($order, $orderRepository) {
-            // Если данных нет в кеше, получаем из базы данных
-            $orderData = $orderRepository->findOneWithRelations($order->getId());
+        $orderData = $this->cache->get(
+            $cacheKey,
+            function (ItemInterface $item)
+                use ($order, $orderRepository) {
+                // Если данных нет в кеше, получаем из базы данных
+                $orderData = $orderRepository
+                    ->findOneWithRelations($order->getId());
 
             // Сохраняем данные в кеш на 1 час
             $item->expiresAfter(3600);

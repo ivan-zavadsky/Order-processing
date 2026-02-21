@@ -8,7 +8,7 @@ class UpdateOrderDto
 {
     public function __construct(
         public int $id,
-        public string $userName,
+        public ?string $userName,
         public string $status,
         /** OrderItemDto[] */
         public array $items

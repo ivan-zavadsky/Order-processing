@@ -65,7 +65,7 @@ final class OrderController extends AbstractController
 
             $data[] = new UpdateOrderDto(
                 id: $order->getId(),
-                userName: $order->getUserId(),
+                userName: $order->getUser()?->getName() ?: null,
                 status: $order->getStatus()->value,
                 items: $items
             );

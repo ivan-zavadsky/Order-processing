@@ -13,18 +13,11 @@
                 - Delete selected
             </a>
             <a
-{#                href="{{ path('app_order_new_bulk') }}"#}
                 class="btn btn-primary"
                 data-action="orders"
             >
                 + Send several orders
             </a>
-{#            <a#}
-{#                href="{{ path('app_order_new') }}"#}
-{#                class="btn btn-primary"#}
-{#            >#}
-{#                + Create order#}
-{#            </a>#}
         </div>
 
         <table class="table table-striped table-bordered table-hover align-middle">
@@ -37,7 +30,7 @@
                     </th>
                     <th class="text-center">Id</th>
                     <th class="text-center">Status</th>
-
+                    <th class="text-center">Client</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
@@ -51,11 +44,8 @@
                     </td>
                     <td>{{ order.id }}</td>
                     <td>{{ order.status.value }}</td>
-                        {% include 'order/action_buttons.html.twig' %}
-{#                        User: {{ order.userId }}<br>#}
-{#                        {% for item in order.items%}#}
-{#                            {{ item.product.name }} x {{ item.quantity }}<br>#}
-{#                        {% endfor %}#}
+                    <td>{{ order.user.name|default('noname') }}</td>
+                    {% include 'order/action_buttons.html.twig' %}
                 </tr>
             {% else %}
                 <tr>

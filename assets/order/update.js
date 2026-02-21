@@ -38,6 +38,7 @@ export function update(data) {
             </td>
             <td>${order.id}</td>
             <td>${order.status}</td>
+            <td>${ order.userName }</td>
             <td class="text-end">
                 <a
                     href="/order/${order.id}"

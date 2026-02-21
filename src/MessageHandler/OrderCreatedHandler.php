@@ -30,22 +30,31 @@ readonly class OrderCreatedHandler
     {
         sleep(5);
 
-        $order = $this->orderRepository
-            ->findObjectWithRelations($message->orderId);
+//        $order = $this->orderRepository
+//            ->findObjectWithRelations($message->orderId);
+        $order = $message->order;
+        if (!$order) {
+            return;
+        }
         $order->setStatus(OrderStatus::PROCESSING);
         $this->orderRepository->save($order);
 
         // Формируем данные в том же формате, что и в findOneWithRelations (getScalarResult)
-        $orderData = [];
+        $orderItemsData = [];
         foreach ($order->getItems() as $item) {
-            $orderData[] = [
-                'id' => $order->getId(),
-                'orderItemId' => $item->getId(),
+            $orderItemsData[] = [
+//                'id' => $order->getId(),
+//                'orderItemId' => $item->getId(),
                 'name' => $item->getProduct()->getName(),
                 'price' => $item->getProduct()->getPrice(),
                 'quantity' => $item->getQuantity()
             ];
         }
+        $orderData = [
+            'id' => $order->getId(),
+            'status' => $order->getStatus(),
+            'items' => $orderItemsData,
+        ];
 
         // Сохраняем данные в кеш
         $this->cache->get(

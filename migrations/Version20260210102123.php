@@ -22,7 +22,7 @@ final class Version20260210102123 extends AbstractMigration
         // Create order table
         $orderTable = $schema->createTable('order');
         $orderTable->addColumn('id', 'integer', ['autoincrement' => true, 'notnull' => true]);
-        $orderTable->addColumn('user_id', 'integer', ['notnull' => true]);
+        $orderTable->addColumn('user_id', 'integer', ['notnull' => false]);
         $orderTable->setPrimaryKey(['id']);
 
         // Add my_order_id column to product table
