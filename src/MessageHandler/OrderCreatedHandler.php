@@ -30,12 +30,9 @@ readonly class OrderCreatedHandler
     {
         sleep(5);
 
-//        $order = $this->orderRepository
-//            ->findObjectWithRelations($message->orderId);
-        $order = $message->order;
-        if (!$order) {
-            return;
-        }
+        $order = $this->orderRepository->findOneBy(
+            ['id' => $message->orderId]
+        );
         $order->setStatus(OrderStatus::PROCESSING);
         $this->orderRepository->save($order);
 
@@ -43,8 +40,6 @@ readonly class OrderCreatedHandler
         $orderItemsData = [];
         foreach ($order->getItems() as $item) {
             $orderItemsData[] = [
-//                'id' => $order->getId(),
-//                'orderItemId' => $item->getId(),
                 'name' => $item->getProduct()->getName(),
                 'price' => $item->getProduct()->getPrice(),
                 'quantity' => $item->getQuantity()

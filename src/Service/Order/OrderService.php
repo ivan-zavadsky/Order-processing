@@ -60,7 +60,7 @@ readonly class OrderService
 
         $this->bus->dispatch(
             new OrderCreatedMessage(
-                  $order
+                  $order->getId()
             )
         );
 

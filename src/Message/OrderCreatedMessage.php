@@ -10,8 +10,6 @@ use App\Enum\OrderStatus;
 readonly class OrderCreatedMessage
 {
     public function __construct(
-        public Order $order,
-//        public int $orderId,
-//        public int $userId
+        public int $orderId,
     ) {}
 }
