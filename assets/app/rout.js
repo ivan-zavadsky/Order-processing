@@ -1,5 +1,6 @@
 /**
- * Роутер событий, который выполняет колбеки в зависимости от значения action в dataset
+ * Роутер событий, который выполняет колбеки в зависимости от значения
+ * action в dataset
  * @param {Event} event - объект события
  * @param Orders
  */
@@ -17,4 +18,3 @@ export function rout(event, Orders) {
             break;
     }
 }
-
