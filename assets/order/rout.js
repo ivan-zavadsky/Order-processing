@@ -9,9 +9,9 @@ export function rout(event, Orders) {
         case 'order-items#add':
             Orders.addOrderItem();
             break;
-        case 'order-items#remove':
-            Orders.removeOrderItem(event);
-            break;
+        // case 'order-items#remove':
+        //     Orders.removeOrderItem(event);
+        //     break;
         case 'check-all':
             Orders.handleCheckAll(event);
             break;

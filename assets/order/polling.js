@@ -26,22 +26,3 @@ export function startPolling(callback, interval = 3000) {
         stop
     };
 }
-
-/**
- * Функция для получения данных о заказах с сервера
- */
-export function fetchOrders() {
-    return fetch('/api/order/all', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error fetching orders');
-        }
-        return response.json();
-    });
-}
