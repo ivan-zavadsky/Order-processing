@@ -12,22 +12,18 @@
                 <th>Цена</th>
                 <th>Количество</th>
                 <th>Стоимость</th>
-{#                <th>Товар</th>#}
             </tr>
         </thead>
         <tbody>
-            {% for orderItem in order %}
+            {% for orderItem in order.items %}
             <tr>
                 <td>{{ orderItem.name }}</td>
                 <td>{{ orderItem.price }}</td>
                 <td>{{ orderItem.quantity }}</td>
                 <td>{{ orderItem.quantity * orderItem.price }}</td>
-{#                <td>{{ order.id }}</td>#}
             </tr>
             {% endfor %}
 
-{#                <th>UserId</th>#}
-{#                <td>{{ order.userId }}</td>#}
         </tbody>
     </table>
 
@@ -37,14 +33,5 @@
         >
             Back to list
         </a>
-{#        <a#}
-{#            href="{{ path('app_order_edit', {'id': order.id}) }}"#}
-{#            class="btn btn-sm btn-primary"#}
-{#        >#}
-{#            Edit#}
-{#        </a>#}
-
-{#        {{ include('order/_delete_form.html.twig', {'order': order}) }}#}
-
     </div>
 {% endblock %}

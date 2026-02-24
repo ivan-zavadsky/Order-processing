@@ -13,7 +13,7 @@ export function update(data) {
     if (data.length === 0) {
         tbody.innerHTML =
             `<tr><td
-                colspan="4"
+                colspan="5"
                 class="text-center text-muted"
             >
                 no records found
@@ -36,9 +36,9 @@ export function update(data) {
                     <input type="checkbox" name="ids[]" value="${order.id}" ${selectedIds.includes(String(order.id)) ? 'checked' : ''}>
                 </label>
             </td>
+            <td>${ order.userName }</td>
             <td>${order.id}</td>
             <td>${order.status}</td>
-            <td>${ order.userName }</td>
             <td class="text-end">
                 <a
                     href="/order/${order.id}"
