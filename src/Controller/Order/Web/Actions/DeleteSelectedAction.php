@@ -7,24 +7,28 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class DeleteSelectedAction
+readonly class DeleteSelectedAction
 {
+    public function __construct(
+        private OrderRepository        $orderRepository,
+        private EntityManagerInterface $entityManager,
+    ) {}
     public function __invoke(
         Request $request,
-        OrderRepository $orderRepository,
-        EntityManagerInterface $entityManager
-    ): Response {
+    )
+        : Response
+    {
         $data = json_decode($request->getContent(), true);
         $ids = $data['ids'] ?? [];
 
         foreach ($ids as $id) {
-            $order = $orderRepository->find($id);
+            $order = $this->orderRepository->find($id);
             if ($order) {
-                $entityManager->remove($order);
+                $this->entityManager->remove($order);
             }
         }
 
-        $entityManager->flush();
+        $this->entityManager->flush();
 
         return new Response(null, Response::HTTP_NO_CONTENT);
     }

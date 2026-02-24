@@ -12,7 +12,8 @@ use Twig\Error\SyntaxError;
 readonly class IndexAction
 {
     public function __construct(
-        private Environment $twig
+        private Environment $twig,
+        private OrderRepository $orderRepository,
     ) {
     }
 
@@ -21,13 +22,13 @@ readonly class IndexAction
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function __invoke(OrderRepository $orderRepository): Response
+    public function __invoke(): Response
     {
         //todo: get data from Redis
 
         return new Response($this->twig->render(
                 'order/index.html.twig', [
-                'orders' => $orderRepository->findAll(),
+                'orders' => $this->orderRepository->findAll(),
             ]
         ));
     }
