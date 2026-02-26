@@ -72,7 +72,7 @@ class OrderRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('o')
             ->leftJoin('o.items', 'i')
             ->leftJoin('i.product', 'p')
-            ->leftJoin('o.users', 'u')
+            ->leftJoin('o.user', 'u')
             ->where('o.id=:id')
             ->setParameter('id', $id)
             ->orderBy('o.id', 'ASC')

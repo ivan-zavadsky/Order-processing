@@ -15,26 +15,17 @@
             </tr>
         </thead>
         <tbody>
-            {% for orderItem in order.items %}
             <tr>
-                <td>{{ orderItem.productName }}</td>
-                <td>{{ orderItem.price }}</td>
-                <td>{{ orderItem.quantity }}</td>
-                <td>{{ orderItem.quantity * orderItem.price }}</td>
+                <td colspan="4" class="text-center text-muted">
+                    The order has not been processed yet
+                </td>
             </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4" class="text-center text-muted">
-                        no records found
-                    </td>
-                </tr>
 
-            {% endfor %}
         </tbody>
     </table>
 
     <div class="d-flex gap-2 mt-3 justify-content-end">
-        <a href="{{ path('app_order_index') }}"
+    <a href="{{ path('app_order_index') }}"
            class="btn btn-sm btn-secondary"
         >
             Back to list

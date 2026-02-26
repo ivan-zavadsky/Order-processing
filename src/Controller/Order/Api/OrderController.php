@@ -8,7 +8,9 @@ use App\Service\Order\OrderItemDto;
 use App\Service\Order\OrderService;
 use App\Service\Order\UpdateOrderDto;
 use App\Service\Order\UpdateOrderItemDto;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\Exception\ExceptionInterface as MessengerExceptionInterface;
@@ -19,6 +21,13 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[Route('/api/order')]
 final class OrderController extends AbstractController
 {
+    public function __construct(
+        #[Autowire(service: 'monolog.logger.my_channel')]
+        private readonly LoggerInterface $myLogger,
+    )
+    {
+
+    }
     /**
      * @throws ExceptionInterface|MessengerExceptionInterface
      */
@@ -45,7 +54,7 @@ final class OrderController extends AbstractController
     /**
      * Возвращает список всех заказов в формате JSON
      */
-    #[Route('/all', name: 'app_api_orders', methods: ['GET'])]
+    #[Route('/all', name: 'app_api_orders_all', methods: ['GET'])]
     public function getAllOrders(
         OrderRepository $orderRepository,
         SerializerInterface $serializer

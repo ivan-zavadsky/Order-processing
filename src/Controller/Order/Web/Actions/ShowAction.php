@@ -2,55 +2,50 @@
 
 namespace App\Controller\Order\Web\Actions;
 
-use App\Entity\Order;
 use App\Repository\OrderRepository;
+use App\Service\CacheService;
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\ItemInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Symfony\Component\HttpFoundation\Response;
 
 readonly class ShowAction
 {
     public function __construct(
-        private Environment    $twig,
-        private CacheInterface $cache
+        private CacheService    $cache,
+        private Environment     $twig,
+        private OrderRepository $orderRepository,
+        #[Autowire(service: 'monolog.logger.my_channel')]
+        private LoggerInterface $myLogger,
+
     ) {
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
+     * @param int $orderId
+     * @return Response
      * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      * @throws InvalidArgumentException
      */
     public function __invoke(
-        Order $order,
-        OrderRepository $orderRepository
-    ): Response {
-        $cacheKey = 'order_' . $order->getId();
-
-        // Сначала пытаемся получить данные из кеша
-        $orderData = $this->cache->get(
-            $cacheKey,
-            function (ItemInterface $item)
-                use ($order, $orderRepository) {
-                // Если данных нет в кеше, получаем из базы данных
-                $orderData = $orderRepository
-                    ->findOneWithRelations($order->getId());
-
-            // Сохраняем данные в кеш на 1 час
-            $item->expiresAfter(3600);
-
-            return $orderData;
-        });
+        int $orderId,
+    )
+        : Response
+    {
+        $cacheKey = 'order_' . $orderId;
+        $order = unserialize($this->cache->getCacheValue($cacheKey));
 
         return new Response($this->twig->render(
-            'order/show.html.twig', [
-            'order' => $orderData,
+            $order
+                    ? 'order/show.html.twig'
+                    : 'order/no_show.html.twig', [
+                'order' => $order,
         ]));
     }
 }

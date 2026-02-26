@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Order\Web;
 
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Controller\Order\Web\Actions\IndexAction;
 use App\Controller\Order\Web\Actions\ShowAction;
 use App\Controller\Order\Web\Actions\DeleteSelectedAction;
-use Psr\Cache\InvalidArgumentException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -40,19 +40,14 @@ final class OrderController extends AbstractController
 
     /**
      * @throws SyntaxError
-     * @throws InvalidArgumentException
      * @throws RuntimeError
-     * @throws LoaderError
+     * @throws LoaderError|InvalidArgumentException
      */
     #[Route('/{id}', name: 'app_order_show', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function show(
-        Request $request,
-    )
+    public function show(int $id)
         : Response
     {
-        return ($this->showAction)(
-            (int) $request->query->get('id'),
-        );
+        return ($this->showAction)($id);
     }
 
     #[Route('/delete-selected', name: 'app_order_delete_selected', methods: ['POST'])]

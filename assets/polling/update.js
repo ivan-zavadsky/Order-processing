@@ -30,15 +30,66 @@ export function update(data) {
             `${item.productName} x ${item.quantity}<br>`
         ).join('');
 
+        let type;
+        switch (order.status) {
+            case 'new':
+                type = 'primary';
+                break;
+            case 'modified':
+                type = 'secondary';
+                break;
+            case 'failed':
+                type = 'dark';
+                break;
+            case 'processing':
+                type = 'secondary';
+                break;
+        }
+
+        order.userName = order.userName
+            ? order.userName
+            : 'Неизвестный пользователь'
+        ;
+
+        let statusTd;
+        switch (order.status) {
+            case 'modified':
+                statusTd =
+                    `<span
+                        class="badge bg-secondary position-relative"
+                    >
+                        <h6>${order.status}</h6>
+                        <span
+                            class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                      </span>
+                    </span>`;
+                break;
+            default:
+                statusTd = `
+                    <span class="badge bg-${type}">
+                        <h6>${order.status}</h6>
+                    </span>
+                `;
+        }
+
         row.innerHTML = `
             <td>
                 <label>
-                    <input type="checkbox" name="ids[]" value="${order.id}" ${selectedIds.includes(String(order.id)) ? 'checked' : ''}>
+                    <input
+                        type="checkbox"
+                        name="ids[]"
+                        value="${order.id}"
+                        ${ selectedIds.includes(String(order.id))
+                            ? 'checked'
+                            : '' }
+                    >
                 </label>
             </td>
-            <td>${ order.userName }</td>
+            <td>${order.userName}</td>
             <td>${order.id}</td>
-            <td>${order.status}</td>
+            <td class="text-center">
+                ${ statusTd }
+            </td>
             <td class="text-end">
                 <a
                     href="/order/${order.id}"
